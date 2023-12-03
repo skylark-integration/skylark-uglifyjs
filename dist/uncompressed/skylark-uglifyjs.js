@@ -3140,6 +3140,7 @@ define('skylark-uglifyjs/ast',[
         is_generator,
         walk_lambda,
         walk_body,
+        is_statement,
 
         TreeWalker,
         TreeTransformer
@@ -8965,7 +8966,8 @@ define('skylark-uglifyjs/scope',[
 
     return {
         base54,
-        is_lhs
+        is_lhs,
+        is_funarg
     };
 });
 define('skylark-uglifyjs/compress',[
@@ -9040,6 +9042,7 @@ define('skylark-uglifyjs/compress',[
         AST_Chain,
         AST_Class,
         AST_ClassExpression,
+        AST_ClassField,
         AST_ClassInitBlock,
         AST_ClassProperty,
         AST_ClassStaticBlock,
@@ -9125,6 +9128,7 @@ define('skylark-uglifyjs/compress',[
         AST_SymbolLet,
         AST_SymbolMethod,
         AST_SymbolRef,
+        AST_SymbolVar,
         AST_Template,
         AST_TemplateString,
         AST_This,
@@ -9151,6 +9155,7 @@ define('skylark-uglifyjs/compress',[
         first_in_statement,
         is_arrow,
         is_generator,
+        is_statement,
         walk_body,
         walk_lambda
     } = m_ast;
@@ -9161,6 +9166,7 @@ define('skylark-uglifyjs/compress',[
         Dictionary,
         has_annotation,
         HOP,
+        List,
         make_node,
         makePredicate,
         MAP,
@@ -9188,7 +9194,8 @@ define('skylark-uglifyjs/compress',[
 
     const { 
         base54, 
-        is_lhs
+        is_lhs,
+        is_funarg
     } = m_scope;
 
     function Compressor(options, false_by_default) {

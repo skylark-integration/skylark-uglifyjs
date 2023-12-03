@@ -961,6 +961,7 @@ define([
 
     return {
         base54,
-        is_lhs
+        is_lhs,
+        is_funarg
     };
 });

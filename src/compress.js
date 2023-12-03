@@ -70,6 +70,7 @@ define([
         AST_Chain,
         AST_Class,
         AST_ClassExpression,
+        AST_ClassField,
         AST_ClassInitBlock,
         AST_ClassProperty,
         AST_ClassStaticBlock,
@@ -155,6 +156,7 @@ define([
         AST_SymbolLet,
         AST_SymbolMethod,
         AST_SymbolRef,
+        AST_SymbolVar,
         AST_Template,
         AST_TemplateString,
         AST_This,
@@ -181,6 +183,7 @@ define([
         first_in_statement,
         is_arrow,
         is_generator,
+        is_statement,
         walk_body,
         walk_lambda
     } = m_ast;
@@ -191,6 +194,7 @@ define([
         Dictionary,
         has_annotation,
         HOP,
+        List,
         make_node,
         makePredicate,
         MAP,
@@ -218,7 +222,8 @@ define([
 
     const { 
         base54, 
-        is_lhs
+        is_lhs,
+        is_funarg
     } = m_scope;
 
     function Compressor(options, false_by_default) {

@@ -2766,6 +2766,7 @@ define([
         is_generator,
         walk_lambda,
         walk_body,
+        is_statement,
 
         TreeWalker,
         TreeTransformer
