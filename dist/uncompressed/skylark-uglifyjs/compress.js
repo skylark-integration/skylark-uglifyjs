@@ -56,6 +56,11 @@ define([
         AST_Arrow,
         AST_Assign,
         AST_AsyncArrow,
+        AST_AsyncDefun,
+        AST_AsyncFunction,
+        AST_AsyncGeneratorDefun,
+        AST_AsyncGeneratorFunction,
+        AST_Atom,
         AST_Await,
         AST_BigInt,
         AST_Binary,
@@ -71,8 +76,12 @@ define([
         AST_Class,
         AST_ClassExpression,
         AST_ClassField,
+        AST_ClassGetter,
+        AST_ClassInit,
         AST_ClassInitBlock,
+        AST_ClassMethod,
         AST_ClassProperty,
+        AST_ClassSetter,
         AST_ClassStaticBlock,
         AST_ConciseMethod,
         AST_Conditional,
@@ -122,14 +131,17 @@ define([
         AST_LoopControl,
         AST_NaN,
         AST_New,
+        AST_NewTarget,
         AST_Node,
         AST_Null,
         AST_Number,
         AST_Object,
         AST_ObjectKeyVal,
+        AST_ObjectGetter,
         AST_ObjectProperty,
         AST_ObjectIdentity,
         AST_ObjectMethod,
+        AST_ObjectSetter,
         AST_PrefixedTemplateString,
         AST_PropAccess,
         AST_RegExp,
@@ -141,10 +153,12 @@ define([
         AST_Statement,
         AST_String,
         AST_Sub,
+        AST_Super,
         AST_Switch,
         AST_SwitchBranch,
         AST_Symbol,
         AST_SymbolCatch,
+        AST_SymbolClass,
         AST_SymbolClassProperty,
         AST_SymbolConst,
         AST_SymbolDeclaration,
@@ -160,6 +174,7 @@ define([
         AST_Template,
         AST_TemplateString,
         AST_This,
+        AST_Throw,
         AST_Toplevel,
         AST_True,
         AST_Try,
@@ -181,9 +196,11 @@ define([
         _PURE,
 
         first_in_statement,
+        root_expr,
         is_arrow,
         is_generator,
         is_statement,
+        is_async,
         walk_body,
         walk_lambda
     } = m_ast;
@@ -192,6 +209,7 @@ define([
         all,
         defaults,
         Dictionary,
+        find_if,
         has_annotation,
         HOP,
         List,
@@ -215,7 +233,9 @@ define([
         JS_Parse_Error,
         parse,
         PRECEDENCE,
-        is_identifier_string
+        is_identifier_string,
+
+        UNARY_POSTFIX 
     } = m_parse;
 
     const  { OutputStream } = m_output;
@@ -223,7 +243,8 @@ define([
     const { 
         base54, 
         is_lhs,
-        is_funarg
+        is_funarg,
+        unary_side_effects
     } = m_scope;
 
     function Compressor(options, false_by_default) {

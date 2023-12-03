@@ -51,6 +51,7 @@ define([
     const {
         characters,
         defaults,
+        find_if,
         makePredicate,
         set_annotation,
         configure_error_stack,
@@ -73,9 +74,13 @@ define([
         AST_Catch,
         AST_Chain,
         AST_ClassExpression,
+        AST_ClassGetter,
+        AST_ClassInit,
+        AST_ClassMethod,
         AST_ClassPrivateProperty,
         AST_ClassProperty,
         AST_ClassStaticBlock,
+        AST_ClassSetter,
         AST_ConciseMethod,
         AST_PrivateIn,
         AST_PrivateGetter,
@@ -87,6 +92,7 @@ define([
         AST_Debugger,
         AST_Default,
         AST_DefaultAssign,
+        AST_DefaultValue,
         AST_DefClass,
         AST_Definitions,
         AST_Defun,
@@ -127,6 +133,7 @@ define([
         AST_Object,
         AST_ObjectGetter,
         AST_ObjectKeyVal,
+        AST_ObjectMethod,
         AST_ObjectProperty,
         AST_ObjectSetter,
         AST_PrefixedTemplateString,
@@ -135,6 +142,7 @@ define([
         AST_Return,
         AST_Sequence,
         AST_SimpleStatement,
+        AST_Spread,
         AST_String,
         AST_Sub,
         AST_Super,
@@ -156,6 +164,7 @@ define([
         AST_SymbolMethod,
         AST_SymbolRef,
         AST_SymbolVar,
+        AST_Template,
         AST_TemplateSegment,
         AST_TemplateString,
         AST_This,
@@ -2731,6 +2740,8 @@ define([
         KEYWORDS,
         RESERVED_WORDS,
         KEYWORDS_BEFORE_EXPRESSION,
-        KEYWORDS_ATOM 
+        KEYWORDS_ATOM,
+        UNARY_POSTFIX,
+        PRECEDENCE 
     }
 });

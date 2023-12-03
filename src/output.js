@@ -115,6 +115,7 @@ define([
         AST_Finally,
         AST_For,
         AST_ForAwaitOf,
+        AST_ForEnumeration,
         AST_ForIn,
         AST_ForOf,
         AST_Function,
@@ -124,6 +125,7 @@ define([
         AST_If,
         AST_Import,
         AST_ImportMeta,
+        AST_IterationStatement,
         AST_Jump,
         AST_LabeledStatement,
         AST_Lambda,
@@ -162,6 +164,7 @@ define([
         AST_Symbol,
         AST_SymbolClassProperty,
         AST_SymbolExport,
+        AST_SymbolFunarg,
         AST_SymbolImport,
         AST_SymbolMethod,
         AST_SymbolPrivateProperty,
@@ -186,9 +189,11 @@ define([
 
         is_arrow,
         is_generator,
+        is_async,
         walk,
         walk_abort,
-        first_in_statement
+        first_in_statement,
+        root_expr
 
     } = m_ast;
 

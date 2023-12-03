@@ -66,8 +66,11 @@ define([
         AST_Class,
         AST_ClassStaticBlock,
         AST_ClassExpression,
+        AST_ClassGetter,
+        AST_ClassInit,
         AST_ClassProperty,
         AST_ClassPrivateProperty,
+        AST_ClassSetter,
         AST_ConciseMethod,
         AST_Conditional,
         AST_Const,
@@ -166,7 +169,9 @@ define([
         AST_With,
         AST_Yield,
 
-        is_generator
+        is_generator,
+        is_arrow,
+        is_async
     } = m_ast;
 
     (function() {

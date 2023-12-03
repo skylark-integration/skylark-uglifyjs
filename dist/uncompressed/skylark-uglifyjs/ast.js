@@ -47,6 +47,7 @@ define([
     "use strict";
 
     const {
+        all,
         HOP,
         List,
         MAP,
@@ -2762,11 +2763,13 @@ define([
 
 
         first_in_statement,
+        root_expr,
         is_arrow,
         is_generator,
         walk_lambda,
         walk_body,
         is_statement,
+        is_async,
 
         TreeWalker,
         TreeTransformer

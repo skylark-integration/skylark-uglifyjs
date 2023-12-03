@@ -421,6 +421,7 @@ define('skylark-uglifyjs/ast',[
     "use strict";
 
     const {
+        all,
         HOP,
         List,
         MAP,
@@ -3136,11 +3137,13 @@ define('skylark-uglifyjs/ast',[
 
 
         first_in_statement,
+        root_expr,
         is_arrow,
         is_generator,
         walk_lambda,
         walk_body,
         is_statement,
+        is_async,
 
         TreeWalker,
         TreeTransformer
@@ -3200,6 +3203,7 @@ define('skylark-uglifyjs/parse',[
     const {
         characters,
         defaults,
+        find_if,
         makePredicate,
         set_annotation,
         configure_error_stack,
@@ -3222,9 +3226,13 @@ define('skylark-uglifyjs/parse',[
         AST_Catch,
         AST_Chain,
         AST_ClassExpression,
+        AST_ClassGetter,
+        AST_ClassInit,
+        AST_ClassMethod,
         AST_ClassPrivateProperty,
         AST_ClassProperty,
         AST_ClassStaticBlock,
+        AST_ClassSetter,
         AST_ConciseMethod,
         AST_PrivateIn,
         AST_PrivateGetter,
@@ -3236,6 +3244,7 @@ define('skylark-uglifyjs/parse',[
         AST_Debugger,
         AST_Default,
         AST_DefaultAssign,
+        AST_DefaultValue,
         AST_DefClass,
         AST_Definitions,
         AST_Defun,
@@ -3276,6 +3285,7 @@ define('skylark-uglifyjs/parse',[
         AST_Object,
         AST_ObjectGetter,
         AST_ObjectKeyVal,
+        AST_ObjectMethod,
         AST_ObjectProperty,
         AST_ObjectSetter,
         AST_PrefixedTemplateString,
@@ -3284,6 +3294,7 @@ define('skylark-uglifyjs/parse',[
         AST_Return,
         AST_Sequence,
         AST_SimpleStatement,
+        AST_Spread,
         AST_String,
         AST_Sub,
         AST_Super,
@@ -3305,6 +3316,7 @@ define('skylark-uglifyjs/parse',[
         AST_SymbolMethod,
         AST_SymbolRef,
         AST_SymbolVar,
+        AST_Template,
         AST_TemplateSegment,
         AST_TemplateString,
         AST_This,
@@ -5880,7 +5892,9 @@ define('skylark-uglifyjs/parse',[
         KEYWORDS,
         RESERVED_WORDS,
         KEYWORDS_BEFORE_EXPRESSION,
-        KEYWORDS_ATOM 
+        KEYWORDS_ATOM,
+        UNARY_POSTFIX,
+        PRECEDENCE 
     }
 });
 define('skylark-uglifyjs/output',[
@@ -6000,6 +6014,7 @@ define('skylark-uglifyjs/output',[
         AST_Finally,
         AST_For,
         AST_ForAwaitOf,
+        AST_ForEnumeration,
         AST_ForIn,
         AST_ForOf,
         AST_Function,
@@ -6009,6 +6024,7 @@ define('skylark-uglifyjs/output',[
         AST_If,
         AST_Import,
         AST_ImportMeta,
+        AST_IterationStatement,
         AST_Jump,
         AST_LabeledStatement,
         AST_Lambda,
@@ -6047,6 +6063,7 @@ define('skylark-uglifyjs/output',[
         AST_Symbol,
         AST_SymbolClassProperty,
         AST_SymbolExport,
+        AST_SymbolFunarg,
         AST_SymbolImport,
         AST_SymbolMethod,
         AST_SymbolPrivateProperty,
@@ -6071,9 +6088,11 @@ define('skylark-uglifyjs/output',[
 
         is_arrow,
         is_generator,
+        is_async,
         walk,
         walk_abort,
-        first_in_statement
+        first_in_statement,
+        root_expr
 
     } = m_ast;
 
@@ -8055,6 +8074,7 @@ define('skylark-uglifyjs/scope',[
 
     const {
         defaults,
+        find_if,
         keep_name,
         mergeSort,
         member,
@@ -8102,9 +8122,11 @@ define('skylark-uglifyjs/scope',[
         AST_LabelRef,
         AST_Lambda,
         AST_LambdaDefinition,
+        AST_LambdaExpression,
         AST_LoopControl,
         AST_NameMapping,
         AST_Node,
+        AST_PropAccess,
         AST_Scope,
         AST_Sequence,
         AST_String,
@@ -8135,7 +8157,9 @@ define('skylark-uglifyjs/scope',[
         walk_body,
         walk_lambda,
         AST_BlockScope,
-        AST_Unary
+        AST_Unary,
+
+        is_arrow
     } = m_ast;;
 
     const {
@@ -8967,7 +8991,8 @@ define('skylark-uglifyjs/scope',[
     return {
         base54,
         is_lhs,
-        is_funarg
+        is_funarg,
+        unary_side_effects
     };
 });
 define('skylark-uglifyjs/compress',[
@@ -9028,6 +9053,11 @@ define('skylark-uglifyjs/compress',[
         AST_Arrow,
         AST_Assign,
         AST_AsyncArrow,
+        AST_AsyncDefun,
+        AST_AsyncFunction,
+        AST_AsyncGeneratorDefun,
+        AST_AsyncGeneratorFunction,
+        AST_Atom,
         AST_Await,
         AST_BigInt,
         AST_Binary,
@@ -9043,8 +9073,12 @@ define('skylark-uglifyjs/compress',[
         AST_Class,
         AST_ClassExpression,
         AST_ClassField,
+        AST_ClassGetter,
+        AST_ClassInit,
         AST_ClassInitBlock,
+        AST_ClassMethod,
         AST_ClassProperty,
+        AST_ClassSetter,
         AST_ClassStaticBlock,
         AST_ConciseMethod,
         AST_Conditional,
@@ -9094,14 +9128,17 @@ define('skylark-uglifyjs/compress',[
         AST_LoopControl,
         AST_NaN,
         AST_New,
+        AST_NewTarget,
         AST_Node,
         AST_Null,
         AST_Number,
         AST_Object,
         AST_ObjectKeyVal,
+        AST_ObjectGetter,
         AST_ObjectProperty,
         AST_ObjectIdentity,
         AST_ObjectMethod,
+        AST_ObjectSetter,
         AST_PrefixedTemplateString,
         AST_PropAccess,
         AST_RegExp,
@@ -9113,10 +9150,12 @@ define('skylark-uglifyjs/compress',[
         AST_Statement,
         AST_String,
         AST_Sub,
+        AST_Super,
         AST_Switch,
         AST_SwitchBranch,
         AST_Symbol,
         AST_SymbolCatch,
+        AST_SymbolClass,
         AST_SymbolClassProperty,
         AST_SymbolConst,
         AST_SymbolDeclaration,
@@ -9132,6 +9171,7 @@ define('skylark-uglifyjs/compress',[
         AST_Template,
         AST_TemplateString,
         AST_This,
+        AST_Throw,
         AST_Toplevel,
         AST_True,
         AST_Try,
@@ -9153,9 +9193,11 @@ define('skylark-uglifyjs/compress',[
         _PURE,
 
         first_in_statement,
+        root_expr,
         is_arrow,
         is_generator,
         is_statement,
+        is_async,
         walk_body,
         walk_lambda
     } = m_ast;
@@ -9164,6 +9206,7 @@ define('skylark-uglifyjs/compress',[
         all,
         defaults,
         Dictionary,
+        find_if,
         has_annotation,
         HOP,
         List,
@@ -9187,7 +9230,9 @@ define('skylark-uglifyjs/compress',[
         JS_Parse_Error,
         parse,
         PRECEDENCE,
-        is_identifier_string
+        is_identifier_string,
+
+        UNARY_POSTFIX 
     } = m_parse;
 
     const  { OutputStream } = m_output;
@@ -9195,7 +9240,8 @@ define('skylark-uglifyjs/compress',[
     const { 
         base54, 
         is_lhs,
-        is_funarg
+        is_funarg,
+        unary_side_effects
     } = m_scope;
 
     function Compressor(options, false_by_default) {
@@ -24269,8 +24315,8 @@ define('skylark-uglifyjs/minify',[
                 result.warnings = warnings;
             }
             return result;
-        } catch (ex) {
-            return { error: ex };
+        ///} catch (ex) {
+        ///    return { error: ex };
         } finally {
             AST_Node.log_function();
             AST_Node.disable_validation();

@@ -50,6 +50,7 @@ define([
 
     const {
         defaults,
+        find_if,
         keep_name,
         mergeSort,
         member,
@@ -97,9 +98,11 @@ define([
         AST_LabelRef,
         AST_Lambda,
         AST_LambdaDefinition,
+        AST_LambdaExpression,
         AST_LoopControl,
         AST_NameMapping,
         AST_Node,
+        AST_PropAccess,
         AST_Scope,
         AST_Sequence,
         AST_String,
@@ -130,7 +133,9 @@ define([
         walk_body,
         walk_lambda,
         AST_BlockScope,
-        AST_Unary
+        AST_Unary,
+
+        is_arrow
     } = m_ast;;
 
     const {
@@ -962,6 +967,7 @@ define([
     return {
         base54,
         is_lhs,
-        is_funarg
+        is_funarg,
+        unary_side_effects
     };
 });

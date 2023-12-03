@@ -292,8 +292,8 @@ define([
                 result.warnings = warnings;
             }
             return result;
-        } catch (ex) {
-            return { error: ex };
+        ///} catch (ex) {
+        ///    return { error: ex };
         } finally {
             AST_Node.log_function();
             AST_Node.disable_validation();
