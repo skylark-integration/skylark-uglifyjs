@@ -87,6 +87,7 @@ define([
         AST_EmptyStatement,
         AST_Expansion,
         AST_Export,
+        AST_ExportDeclaration,
         AST_False,
         AST_Finally,
         AST_For,

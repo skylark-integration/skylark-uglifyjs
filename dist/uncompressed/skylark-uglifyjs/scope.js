@@ -84,6 +84,7 @@ define([
         AST_Dot,
         AST_DotHash,
         AST_Export,
+        AST_ExportDeclaration,
         AST_For,
         AST_ForIn,
         AST_ForOf,
