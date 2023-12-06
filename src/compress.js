@@ -233,6 +233,7 @@ define([
         JS_Parse_Error,
         parse,
         PRECEDENCE,
+        decode_escape_sequence,
         is_identifier_string,
 
         UNARY_POSTFIX 
