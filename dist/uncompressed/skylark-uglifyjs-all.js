@@ -5,10 +5,8 @@
  * @link www.skylarkjs.org
  * @license MIT
  */
-(function(factory,globals) {
-  var define = globals.define,
-      require = globals.require,
-      isAmd = (typeof define === 'function' && define.amd),
+(function(factory,globals,define,require) {
+  var isAmd = (typeof define === 'function' && define.amd),
       isCmd = (!isAmd && typeof exports !== 'undefined');
 
   if (!isAmd && !define) {
@@ -3276,6 +3274,7 @@ define('skylark-uglifyjs/parse',[
         AST_If,
         AST_Import,
         AST_ImportMeta,
+        AST_Infinity,
         AST_IterationStatement,
         AST_Label,
         AST_LabeledStatement,
@@ -24342,5 +24341,5 @@ define('skylark-uglifyjs/main',[
 define('skylark-uglifyjs', ['skylark-uglifyjs/main'], function (main) { return main; });
 
 
-},this);
+},this,define,require);
 //# sourceMappingURL=sourcemaps/skylark-uglifyjs-all.js.map

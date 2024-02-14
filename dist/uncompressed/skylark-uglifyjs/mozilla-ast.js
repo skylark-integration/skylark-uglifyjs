@@ -106,6 +106,7 @@ define([
         AST_If,
         AST_Import,
         AST_ImportMeta,
+        AST_Infinity,
         AST_Label,
         AST_LabeledStatement,
         AST_LabelRef,
