@@ -114,6 +114,7 @@ define([
         AST_False,
         AST_Finally,
         AST_For,
+        AST_ForAwaitOf,
         AST_ForEnumeration,
         AST_ForIn,
         AST_Function,
